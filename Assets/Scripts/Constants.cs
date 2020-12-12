@@ -10,14 +10,14 @@
 
 	public static class DefaultStat
 	{
-		public static readonly float Player_Move_Speed = 3f;
-		public static readonly float Player_Jump_Power = 0.15f;
+		public static readonly float Player_Move_Speed = 2f;
+		public static readonly float Player_Jump_Power = 0.06f;
 	}
 
 	public static class Physics
 	{
 		public static readonly float Ground_Check_Distance = 0.5f;
-		public static readonly float Gravity_Acceleration = 0.4f;
+		public static readonly float Gravity_Acceleration = 0.2f;
 		public static readonly float Max_Gravity_Acceleration = 0.08f;
 		public static readonly float Speed_Multiplier_On_Air = 0.9f;
 	}
