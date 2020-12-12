@@ -5,7 +5,7 @@ public class CustomCharacterController : MonoBehaviour
 	// Properties
 	[SerializeField] float speed;
 	float jumpPower;
-	[SerializeField] float velocity_y;
+	float velocity_y;
 	[SerializeField] bool isGround;
 
 	// Cached Variables
