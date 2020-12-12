@@ -8,10 +8,26 @@
 		public const string AxisName_Move_Vertical = "Vertical";
 	}
 
+	public static class DefaultStat
+	{
+		public static readonly float Player_Move_Speed = 3f;
+		public static readonly float Player_Jump_Power = 0.15f;
+	}
+
 	public static class Physics
 	{
-		public static readonly float GroundCheckDistance = 0.9f;
-		public static readonly float GravityAcceleration = 0.26f;
+		public static readonly float Ground_Check_Distance = 0.5f;
+		public static readonly float Gravity_Acceleration = 0.4f;
+		public static readonly float Max_Gravity_Acceleration = 0.08f;
+		public static readonly float Speed_Multiplier_On_Air = 0.9f;
+	}
+
+	public static class GameEnv
+	{
+		public static readonly float Camera_X_Speed = 3f;
+		public static readonly float Camera_Y_Speed = 3f;
+		public static readonly float Camera_X_Limit_Min = -85f;
+		public static readonly float Camera_X_Limit_Max = 85f;
 	}
 
 	public static class Layer

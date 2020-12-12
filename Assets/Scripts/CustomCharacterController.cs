@@ -2,10 +2,10 @@
 
 public class CustomCharacterController : MonoBehaviour
 {
-	[SerializeField] float speed = 3f;
-
 	// Properties
-	[SerializeField] float gravityAccSpeed;
+	[SerializeField] float speed;
+	float jumpPower;
+	[SerializeField] float velocity_y;
 	[SerializeField] bool isGround;
 
 	// Cached Variables
@@ -14,38 +14,58 @@ public class CustomCharacterController : MonoBehaviour
 
 	void Awake()
 	{
+		Application.targetFrameRate = 60;
 		transform = GetComponent<Transform>();
 		controller = GetComponent<CharacterController>();
 	}
 
 	void Start()
 	{
-		gravityAccSpeed = 0f;
+		velocity_y = 0f;
+		isGround = false;
+		speed = Constants.DefaultStat.Player_Move_Speed;
+		jumpPower = Constants.DefaultStat.Player_Jump_Power;
 	}
 
-	void FixedUpdate()
+	void Update()
 	{
-		Vector3 inputVec = GetKeyInputVector();
-		if (inputVec.magnitude > 0f)
-		{
-			controller.Move(GetMoveVector() * speed * Time.deltaTime);
-		}
+		// 카메라 회전
+		transform.Rotate(0f, InputManager.Instance.GetMouseInputVector().x * Constants.GameEnv.Camera_X_Speed, 0f);
 
+		// 점프
+		if (Input.GetKey(KeyCode.Space) && IsOnGround())
+			velocity_y = -jumpPower;
+
+		// 중력
 		isGround = IsOnGround();
 
 		if (!isGround)
-			gravityAccSpeed += Constants.Physics.GravityAcceleration * Time.deltaTime;
+		{
+			velocity_y += Constants.Physics.Gravity_Acceleration * Time.deltaTime;
+			if (velocity_y > Constants.Physics.Max_Gravity_Acceleration)
+				velocity_y = Constants.Physics.Max_Gravity_Acceleration;
+		}
 		else
-			gravityAccSpeed = 0f;
+			velocity_y = Mathf.Clamp(velocity_y, velocity_y, 0f);
 
-		controller.Move(Vector3.down * gravityAccSpeed);
+		controller.Move(Vector3.down * velocity_y);
+
+		// 플레이어 이동
+		Vector3 inputVec = GetKeyInputVector();
+		if (inputVec.magnitude > 0f)
+		{
+			if (isGround)
+				controller.Move(GetMoveVector() * Constants.DefaultStat.Player_Move_Speed * Time.deltaTime);
+			else
+				controller.Move(GetMoveVector() * Constants.DefaultStat.Player_Move_Speed * Constants.Physics.Speed_Multiplier_On_Air * Time.deltaTime);
+		}
 	}
 
 	bool IsOnGround()
 	{
 		RaycastHit rayResult;
-		bool isHit = Physics.Raycast(new Ray(transform.position, Vector3.down), out rayResult, Constants.Physics.GroundCheckDistance, ~Constants.Layer.MAP);
-		Debug.DrawLine(transform.position, transform.position + Vector3.down * Constants.Physics.GroundCheckDistance, isHit ? Color.red : Color.blue);
+		bool isHit = Physics.Raycast(new Ray(transform.position, Vector3.down), out rayResult, Constants.Physics.Ground_Check_Distance, ~Constants.Layer.MAP);
+		Debug.DrawLine(transform.position, transform.position + Vector3.down * Constants.Physics.Ground_Check_Distance, isHit ? Color.red : Color.blue);
 		return isHit;
 	}
 
@@ -69,9 +89,5 @@ public class CustomCharacterController : MonoBehaviour
 		return outVec;
 	}
 
-	/// <summary>
-	/// 마우스 입력 벡터 반환
-	/// </summary>
-	Vector3 GetMouseInputVector() => new Vector3(Input.GetAxisRaw(Constants.Input.AxisName_Mouse_X), Input.GetAxisRaw(Constants.Input.AxisName_Mouse_Y), 0f);
 
 }
