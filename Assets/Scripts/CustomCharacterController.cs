@@ -2,6 +2,8 @@
 
 public class CustomCharacterController : MonoBehaviour
 {
+	[SerializeField] Transform cameraTransform;
+
 	// Properties
 	[SerializeField] float speed;
 	float jumpPower;
@@ -9,13 +11,12 @@ public class CustomCharacterController : MonoBehaviour
 	[SerializeField] bool isGround;
 
 	// Cached Variables
-	Transform transform;
+	Transform cachedTransform;
 	CharacterController controller;
 
 	void Awake()
 	{
-		Application.targetFrameRate = 60;
-		transform = GetComponent<Transform>();
+		cachedTransform = GetComponent<Transform>();
 		controller = GetComponent<CharacterController>();
 	}
 
@@ -23,23 +24,64 @@ public class CustomCharacterController : MonoBehaviour
 	{
 		velocity_y = 0f;
 		isGround = false;
-		speed = Constants.DefaultStat.Player_Move_Speed;
-		jumpPower = Constants.DefaultStat.Player_Jump_Power;
+		speed = Constants.DefaultStatus.Player_Move_Speed;
+		jumpPower = Constants.DefaultStatus.Player_Jump_Power;
 	}
 
 	void Update()
 	{
-		// 카메라 회전
-		transform.Rotate(0f, InputManager.Instance.GetMouseInputVector().x * Constants.GameEnv.Camera_X_Speed, 0f);
-
-		// 점프
-		if (Input.GetKey(KeyCode.Space) && IsOnGround())
-			velocity_y = -jumpPower;
-
-		// 중력
 		isGround = IsOnGround();
 
-		if (!isGround)
+		// 카메라 회전
+		UpdateCamera();
+
+		// 점프
+		ProcessJump();
+
+		// 중력
+		ProcessGravity();
+
+		// 플레이어 이동
+		ProcessMove();
+
+		// 격발
+		ProcessFire();
+	}
+
+	void ProcessFire()
+	{
+		RaycastHit result;
+		bool isHit = Physics.Raycast(new Ray(cameraTransform.position, cameraTransform.forward), out result, ~Constants.Layer.ENEMY & ~Constants.Layer.MAP);
+
+
+	}
+
+	void ProcessMove()
+	{
+		Vector3 inputVec = GetKeyInputVector();
+		if (inputVec.magnitude > 0f)
+		{
+			if (isGround)
+				controller.Move(GetMoveVector() * speed * Time.deltaTime);
+			else
+				controller.Move(GetMoveVector() * speed * Constants.Physics.Speed_Multiplier_On_Air * Time.deltaTime);
+		}
+	}
+
+	void UpdateCamera()
+	{
+		cachedTransform.Rotate(0f, InputManager.Instance.GetMouseInputVector().x * Constants.GameEnv.Camera_X_Speed, 0f);
+	}
+
+	void ProcessJump()
+	{
+		if (Input.GetKey(KeyCode.Space) && IsOnGround())
+			velocity_y = -jumpPower;
+	}
+
+	void ProcessGravity()
+	{
+		if (!IsOnGround())
 		{
 			velocity_y += Constants.Physics.Gravity_Acceleration * Time.deltaTime;
 			if (velocity_y > Constants.Physics.Max_Gravity_Acceleration)
@@ -49,23 +91,13 @@ public class CustomCharacterController : MonoBehaviour
 			velocity_y = Mathf.Clamp(velocity_y, velocity_y, 0f);
 
 		controller.Move(Vector3.down * velocity_y);
-
-		// 플레이어 이동
-		Vector3 inputVec = GetKeyInputVector();
-		if (inputVec.magnitude > 0f)
-		{
-			if (isGround)
-				controller.Move(GetMoveVector() * Constants.DefaultStat.Player_Move_Speed * Time.deltaTime);
-			else
-				controller.Move(GetMoveVector() * Constants.DefaultStat.Player_Move_Speed * Constants.Physics.Speed_Multiplier_On_Air * Time.deltaTime);
-		}
 	}
 
 	bool IsOnGround()
 	{
 		RaycastHit rayResult;
-		bool isHit = Physics.Raycast(new Ray(transform.position, Vector3.down), out rayResult, Constants.Physics.Ground_Check_Distance, ~Constants.Layer.MAP);
-		Debug.DrawLine(transform.position, transform.position + Vector3.down * Constants.Physics.Ground_Check_Distance, isHit ? Color.red : Color.blue);
+		bool isHit = Physics.Raycast(new Ray(cachedTransform.position, Vector3.down), out rayResult, Constants.Physics.Ground_Check_Distance, ~Constants.Layer.MAP);
+		Debug.DrawLine(cachedTransform.position, cachedTransform.position + Vector3.down * Constants.Physics.Ground_Check_Distance, isHit ? Color.red : Color.blue);
 		return isHit;
 	}
 
@@ -80,7 +112,7 @@ public class CustomCharacterController : MonoBehaviour
 	Vector3 GetMoveVector()
 	{
 		Vector3 inputVec = GetKeyInputVector();
-		float angle = Mathf.Deg2Rad * transform.localEulerAngles.y;
+		float angle = Mathf.Deg2Rad * cachedTransform.localEulerAngles.y;
 
 		Vector3 outVec = Vector3.zero;
 		outVec.x = Mathf.Cos(angle) * inputVec.x + Mathf.Sin(angle) * inputVec.z;

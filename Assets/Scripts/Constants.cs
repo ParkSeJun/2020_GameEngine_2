@@ -8,7 +8,7 @@
 		public const string AxisName_Move_Vertical = "Vertical";
 	}
 
-	public static class DefaultStat
+	public static class DefaultStatus
 	{
 		public static readonly float Player_Move_Speed = 2f;
 		public static readonly float Player_Jump_Power = 0.06f;
@@ -34,5 +34,7 @@
 	{
 		public static readonly int DEFAULT = 0;
 		public static readonly int MAP = UnityEngine.LayerMask.NameToLayer("Map");
+		public static readonly int PLAYER = UnityEngine.LayerMask.NameToLayer("Player");
+		public static readonly int ENEMY = UnityEngine.LayerMask.NameToLayer("Enemy");
 	}
 }
