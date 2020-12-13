@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CustomCharacterController : MonoBehaviour
+public class Player : MonoBehaviour
 {
 	[SerializeField] Transform cameraTransform;
 
@@ -13,6 +13,9 @@ public class CustomCharacterController : MonoBehaviour
 	// Cached Variables
 	Transform cachedTransform;
 	CharacterController controller;
+	Gun _myGun;
+	Gun myGun => _myGun ?? (_myGun = GetComponentInChildren<Gun>());
+
 
 	void Awake()
 	{
@@ -50,10 +53,17 @@ public class CustomCharacterController : MonoBehaviour
 
 	void ProcessFire()
 	{
+		if (!Input.GetMouseButtonDown(0))
+			return;
+
 		RaycastHit result;
-		bool isHit = Physics.Raycast(new Ray(cameraTransform.position, cameraTransform.forward), out result, ~Constants.Layer.ENEMY & ~Constants.Layer.MAP);
+		bool isHit = Physics.Raycast(new Ray(cameraTransform.position, cameraTransform.forward), out result, 100f, Constants.Layer.MAP | Constants.Layer.ENEMY);
 
+		Vector3 start = myGun.GetGunTipPosition();
+		Vector3 end = isHit ? result.point : cameraTransform.position + cameraTransform.forward * 100f;
 
+		var bulletLine = PoolingManager.Instance.SpawnBulletLine();
+		bulletLine.SetLine(start, end);
 	}
 
 	void ProcessMove()
@@ -96,7 +106,7 @@ public class CustomCharacterController : MonoBehaviour
 	bool IsOnGround()
 	{
 		RaycastHit rayResult;
-		bool isHit = Physics.Raycast(new Ray(cachedTransform.position, Vector3.down), out rayResult, Constants.Physics.Ground_Check_Distance, ~Constants.Layer.MAP);
+		bool isHit = Physics.Raycast(new Ray(cachedTransform.position, Vector3.down), out rayResult, Constants.Physics.Ground_Check_Distance, Constants.Layer.MAP);
 		Debug.DrawLine(cachedTransform.position, cachedTransform.position + Vector3.down * Constants.Physics.Ground_Check_Distance, isHit ? Color.red : Color.blue);
 		return isHit;
 	}

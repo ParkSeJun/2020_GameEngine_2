@@ -6,7 +6,7 @@ using UnityEngine;
 public class ObjectPool<T>
 	where T : PoolableObject
 {
-	List<T> poolList;
+	List<T> poolList = new List<T>();
 	GameObject prefab;
 
 	public ObjectPool(GameObject prefab)
@@ -16,7 +16,7 @@ public class ObjectPool<T>
 
 	public T Spawn()
 	{
-		var stock = poolList.First(e => !e.IsAlive);
+		var stock = poolList.FirstOrDefault(e => e != null && !e.IsAlive);
 		if (!stock)
 		{
 			stock = GameObject.Instantiate(prefab).GetComponent<T>();

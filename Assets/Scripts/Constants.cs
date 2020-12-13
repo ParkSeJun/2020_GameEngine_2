@@ -33,8 +33,8 @@
 	public static class Layer
 	{
 		public static readonly int DEFAULT = 0;
-		public static readonly int MAP = UnityEngine.LayerMask.NameToLayer("Map");
-		public static readonly int PLAYER = UnityEngine.LayerMask.NameToLayer("Player");
-		public static readonly int ENEMY = UnityEngine.LayerMask.NameToLayer("Enemy");
+		public static readonly int MAP = UnityEngine.LayerMask.GetMask("Map");
+		public static readonly int PLAYER = UnityEngine.LayerMask.GetMask("Player");
+		public static readonly int ENEMY = UnityEngine.LayerMask.GetMask("Enemy");
 	}
 }

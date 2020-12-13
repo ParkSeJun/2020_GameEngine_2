@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9184165540824737162}
   - component: {fileID: 9184165540824737161}
+  - component: {fileID: 675971066592715030}
   m_Layer: 0
   m_Name: BulletLine
   m_TagString: Untagged
@@ -81,8 +82,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.003921509
-        value: 0.028729249
+        time: 0
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -129,3 +130,15 @@ LineRenderer:
     generateLightingData: 1
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &675971066592715030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9184165540824737160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160037a5e36685345b4a53572209b3cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
