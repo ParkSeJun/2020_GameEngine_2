@@ -10,7 +10,7 @@
 
 	public static class DefaultStatus
 	{
-		public static readonly float Player_Move_Speed = 2f;
+		public static readonly float Player_Move_Speed = 3f;
 		public static readonly float Player_Jump_Power = 0.06f;
 	}
 
