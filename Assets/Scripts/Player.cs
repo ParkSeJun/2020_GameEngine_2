@@ -96,6 +96,7 @@ public class Player : MonoBehaviour
 
 		var bulletLine = PoolingManager.Instance.SpawnBulletLine();
 		bulletLine.SetLine(start, end);
+		var gunShotEffect = PoolingManager.Instance.SpawnGunShotEffect(myGun.GetGunTipTransform());
 	}
 
 	void ProcessMove()

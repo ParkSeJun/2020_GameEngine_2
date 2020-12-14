@@ -8,6 +8,10 @@ public class PoolingManager : Singletone<PoolingManager>
 	ObjectPool<BulletLine> bulletLinePool;
 	Transform bulletLineParent;
 
+	[SerializeField] GameObject gunShotEffect;
+	ObjectPool<GunShotEffect> gunShotEffectPool;
+	Transform gunShotEffectParent;
+
 	//[SerializeField] GameObject[] monsters;
 	//ObjectPool<BulletLine> bulletLinePool;
 	//Transform bulletLineParent;
@@ -23,6 +27,10 @@ public class PoolingManager : Singletone<PoolingManager>
 		bulletLinePool = new ObjectPool<BulletLine>(bulletLine);
 		bulletLineParent = new GameObject(nameof(BulletLine)).transform;
 		bulletLineParent.SetParent(cachedTransform);
+
+		gunShotEffectPool = new ObjectPool<GunShotEffect>(gunShotEffect);
+		gunShotEffectParent = new GameObject(nameof(GunShotEffect)).transform;
+		gunShotEffectParent.SetParent(cachedTransform);
 	}
 
 	public BulletLine SpawnBulletLine()
@@ -30,6 +38,13 @@ public class PoolingManager : Singletone<PoolingManager>
 		var bulletLine = bulletLinePool.Spawn();
 		bulletLine.transform.SetParent(bulletLineParent);
 		return bulletLine;
+	}
+
+	public GunShotEffect SpawnGunShotEffect(Transform gunTip)
+	{
+		var gunShotEffect = gunShotEffectPool.Spawn();
+		gunShotEffect.ApplyGunTip(gunTip);
+		return gunShotEffect;
 	}
 
 }

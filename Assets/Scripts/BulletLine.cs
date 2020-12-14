@@ -9,8 +9,9 @@ public class BulletLine : PoolableObject
 	LineRenderer lineRenderer;
 	CoroutineHandle effectHandle;
 
-	private void Awake()
+	override public void Awake()
 	{
+		base.Awake();
 		lineRenderer = GetComponent<LineRenderer>();
 	}
 
