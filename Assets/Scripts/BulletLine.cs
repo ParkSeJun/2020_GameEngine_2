@@ -15,15 +15,15 @@ public class BulletLine : PoolableObject
 		lineRenderer = GetComponent<LineRenderer>();
 	}
 
-	public void SetLine(Vector3 start, Vector3 end)
+	public void SetLine(Vector3 start, Vector3 end, float size)
 	{
 		lineRenderer.SetPositions(new Vector3[] { start, end });
 		if (effectHandle.IsValid)
 			Timing.KillCoroutines(effectHandle);
-		effectHandle = Timing.RunCoroutine(YieldEffect());
+		effectHandle = Timing.RunCoroutine(YieldEffect(size));
 	}
 
-	IEnumerator<float> YieldEffect()
+	IEnumerator<float> YieldEffect(float size)
 	{
 		float time = 0f;
 		const float destTime = 0.5f;
@@ -31,7 +31,7 @@ public class BulletLine : PoolableObject
 		{
 			time += Time.deltaTime;
 			float rate = time / destTime;
-			float t = Mathf.Lerp(0.05f, 0f, rate);
+			float t = Mathf.Lerp(size * 0.05f, 0f, rate);
 			lineRenderer.widthMultiplier = t;
 			if (rate >= 1f)
 				break;

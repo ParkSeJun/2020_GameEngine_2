@@ -36,9 +36,17 @@
 
 	public static class Layer
 	{
-		public static readonly int DEFAULT = 0;
-		public static readonly int MAP = UnityEngine.LayerMask.GetMask("Map");
-		public static readonly int PLAYER = UnityEngine.LayerMask.GetMask("Player");
-		public static readonly int ENEMY = UnityEngine.LayerMask.GetMask("Enemy");
+		public const string DEFAULT = "Default";
+		public const string MAP = "Map";
+		public const string PLAYER = "Player";
+		public const string ENEMY = "Enemy";
+
+		public static class Mask
+		{
+			public static readonly int DEFAULT = UnityEngine.LayerMask.GetMask(Layer.DEFAULT);
+			public static readonly int MAP = UnityEngine.LayerMask.GetMask(Layer.MAP);
+			public static readonly int PLAYER = UnityEngine.LayerMask.GetMask(Layer.PLAYER);
+			public static readonly int ENEMY = UnityEngine.LayerMask.GetMask(Layer.ENEMY);
+		}
 	}
 }
