@@ -16,3 +16,4 @@ MonoBehaviour:
   cooldown: 1
   bulletSize: 5
   texture: {fileID: 2800000, guid: 65b74a0012a11724a870ed2af799587b, type: 3}
+  bulletColor: {r: 0.48235294, g: 0, b: 0, a: 1}

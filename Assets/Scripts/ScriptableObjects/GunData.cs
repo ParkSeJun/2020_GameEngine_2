@@ -7,9 +7,11 @@ public class GunData : ScriptableObject
 	[SerializeField] float cooldown;
 	[SerializeField] float bulletSize;
 	[SerializeField] Texture2D texture;
+	[SerializeField] Color bulletColor;
 
 	public float Damage => damage;
 	public float Cooldown => cooldown;
 	public float BulletSize => bulletSize;
 	public Texture2D Texture => texture;
+	public Color BulletColor => bulletColor;
 }

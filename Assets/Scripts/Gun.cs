@@ -11,7 +11,8 @@ public class Gun : MonoBehaviour
 	float afterCooldown; // 다음 격발 가능 시각
 
 	// Cached Variables
-	Renderer renderer;
+	Renderer cachedRenderer;
+	Animator cachedAnimator;
 
 	// Const
 	const float rayLimit = 100f;
@@ -20,7 +21,8 @@ public class Gun : MonoBehaviour
 	{
 		curGunIndex = 0;
 		afterCooldown = 0f;
-		renderer = GetComponent<MeshRenderer>();
+		cachedRenderer = GetComponent<MeshRenderer>();
+		cachedAnimator = GetComponent<Animator>();
 	}
 
 	private void Start()
@@ -46,20 +48,25 @@ public class Gun : MonoBehaviour
 	{
 		curGunIndex = gunIndex;
 
-		renderer.sharedMaterial.SetTexture("_MainTex", GetCurrentGunData().Texture);
+		cachedRenderer.sharedMaterial.SetTexture("_MainTex", GetCurrentGunData().Texture);
 	}
 
 	public void Fire(Vector3 camPos, Vector3 direction)
 	{
+		// 쿨다운 적용
+		afterCooldown = Time.realtimeSinceStartup + GetCurrentGunData().Cooldown;
+
+		// 쏘는 애니메이션
+		cachedAnimator.SetTrigger("fireEvent");
+
 		RaycastHit result;
 		bool isHit = Physics.Raycast(new Ray(camPos, direction), out result, rayLimit, Constants.Layer.Mask.MAP | Constants.Layer.Mask.ENEMY);
-
 		Vector3 start = GetGunTipPosition();
 		Vector3 end = isHit ? result.point : camPos + direction * rayLimit;
 
 		// 궤적 생성
 		var bulletLine = PoolingManager.Instance.SpawnBulletLine();
-		bulletLine.SetLine(start, end, GetCurrentGunData().BulletSize);
+		bulletLine.SetLine(start, end, GetCurrentGunData().BulletSize, GetCurrentGunData().BulletColor);
 
 		// 발사 폭발 이펙트
 		PoolingManager.Instance.SpawnGunShotEffect(GetGunTipTransform());
@@ -79,8 +86,7 @@ public class Gun : MonoBehaviour
 			}
 		}
 
-		// 쿨다운 적용
-		afterCooldown = Time.realtimeSinceStartup + GetCurrentGunData().Cooldown;
+		
 	}
 
 	public bool CanFire() => afterCooldown < Time.realtimeSinceStartup;

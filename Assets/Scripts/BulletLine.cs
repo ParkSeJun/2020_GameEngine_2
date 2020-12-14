@@ -15,12 +15,13 @@ public class BulletLine : PoolableObject
 		lineRenderer = GetComponent<LineRenderer>();
 	}
 
-	public void SetLine(Vector3 start, Vector3 end, float size)
+	public void SetLine(Vector3 start, Vector3 end, float size, Color col)
 	{
 		lineRenderer.SetPositions(new Vector3[] { start, end });
 		if (effectHandle.IsValid)
 			Timing.KillCoroutines(effectHandle);
 		effectHandle = Timing.RunCoroutine(YieldEffect(size));
+		lineRenderer.sharedMaterial.SetColor("_EmissionColor", col);
 	}
 
 	IEnumerator<float> YieldEffect(float size)
