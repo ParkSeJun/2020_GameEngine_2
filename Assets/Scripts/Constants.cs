@@ -10,8 +10,12 @@
 
 	public static class DefaultStatus
 	{
-		public static readonly float Player_Move_Speed = 3f;
-		public static readonly float Player_Jump_Power = 0.06f;
+		public static class Player
+		{
+			public static readonly float Move_Speed = 3f;
+			public static readonly float Zoom_Move_Speed_Multiplier = 0.6f;
+			public static readonly float Jump_Power = 0.06f;
+		}
 	}
 
 	public static class Physics

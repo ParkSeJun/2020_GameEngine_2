@@ -1,14 +1,18 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using UnityEngine;
 
 public class Player : MonoBehaviour
 {
 	[SerializeField] Transform cameraTransform;
+	[SerializeField] CinemachineVirtualCamera camDefault;
+	[SerializeField] CinemachineVirtualCamera camZoom;
 
 	// Properties
 	[SerializeField] float speed;
 	float jumpPower;
 	float velocity_y;
 	[SerializeField] bool isGround;
+	[SerializeField] bool isZoom;
 
 	// Cached Variables
 	Transform cachedTransform;
@@ -27,18 +31,21 @@ public class Player : MonoBehaviour
 	{
 		velocity_y = 0f;
 		isGround = false;
-		speed = Constants.DefaultStatus.Player_Move_Speed;
-		jumpPower = Constants.DefaultStatus.Player_Jump_Power;
+		isZoom = false;
+
+		speed = Constants.DefaultStatus.Player.Move_Speed;
+		jumpPower = Constants.DefaultStatus.Player.Jump_Power;
 	}
 
 	void Update()
 	{
 		isGround = IsOnGround();
+		isZoom = Input.GetMouseButton(1);
 
 		// 카메라 회전
 		UpdateCamera();
 
-		// 점프
+		// 점프 (Space)
 		ProcessJump();
 
 		// 중력
@@ -47,8 +54,33 @@ public class Player : MonoBehaviour
 		// 플레이어 이동
 		ProcessMove();
 
-		// 격발
+		// 격발 (좌클릭)
 		ProcessFire();
+
+		// 조준 모드 (우클릭)
+		ProcessZoom();
+	}
+
+	void ProcessZoom()
+	{
+		// 줌 모드 실행
+		if (Input.GetMouseButtonDown(1))
+		{
+			// Gun 줌 애니메이션 실행
+
+			// 카메라 변경
+			camDefault.enabled = false;
+			camZoom.enabled = true;
+		}
+
+		if (Input.GetMouseButtonUp(1))
+		{
+			// Gun Idle 애니메이션 실행
+
+			// 카메라 변경
+			camDefault.enabled = true;
+			camZoom.enabled = false;
+		}
 	}
 
 	void ProcessFire()
@@ -71,10 +103,17 @@ public class Player : MonoBehaviour
 		Vector3 inputVec = GetKeyInputVector();
 		if (inputVec.magnitude > 0f)
 		{
-			if (isGround)
-				controller.Move(GetMoveVector() * speed * Time.deltaTime);
-			else
-				controller.Move(GetMoveVector() * speed * Constants.Physics.Speed_Multiplier_On_Air * Time.deltaTime);
+			var moveVec = GetMoveVector();
+
+			moveVec *= speed;
+
+			if (!isGround)
+				moveVec *= Constants.Physics.Speed_Multiplier_On_Air;
+
+			if (isZoom)
+				moveVec *= Constants.DefaultStatus.Player.Zoom_Move_Speed_Multiplier;
+
+			controller.Move(moveVec * Time.deltaTime);
 		}
 	}
 
