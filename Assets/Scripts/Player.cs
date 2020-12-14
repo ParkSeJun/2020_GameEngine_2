@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Unity.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -13,6 +14,8 @@ public class Player : MonoBehaviour
 	float velocity_y;
 	[SerializeField] bool isGround;
 	[SerializeField] bool isZoom;
+	[ReadOnly] float nextDmgTime; // 대미지를 입을 수 있는 시각
+	[ReadOnly] int hp;
 
 	// Cached Variables
 	Transform cachedTransform;
@@ -32,6 +35,8 @@ public class Player : MonoBehaviour
 		velocity_y = 0f;
 		isGround = false;
 		isZoom = false;
+		nextDmgTime = 0f;
+		hp = 5;
 
 		speed = Constants.DefaultStatus.Player.Move_Speed;
 		jumpPower = Constants.DefaultStatus.Player.Jump_Power;
@@ -66,20 +71,22 @@ public class Player : MonoBehaviour
 		// 줌 모드 실행
 		if (Input.GetMouseButtonDown(1))
 		{
-			// Gun 줌 애니메이션 실행
-
 			// 카메라 변경
 			camDefault.enabled = false;
 			camZoom.enabled = true;
+
+			// Gun 줌 애니메이션 실행
+			myGun.SetZoomState(true);
 		}
 
 		if (Input.GetMouseButtonUp(1))
 		{
-			// Gun Idle 애니메이션 실행
-
 			// 카메라 변경
 			camDefault.enabled = true;
 			camZoom.enabled = false;
+
+			// Gun Idle 애니메이션 실행
+			myGun.SetZoomState(false);
 		}
 	}
 
@@ -108,6 +115,12 @@ public class Player : MonoBehaviour
 				moveVec *= Constants.DefaultStatus.Player.Zoom_Move_Speed_Multiplier;
 
 			controller.Move(moveVec * Time.deltaTime);
+
+			myGun.SetMovingState(true);
+		}
+		else
+		{
+			myGun.SetMovingState(false);
 		}
 	}
 
@@ -135,6 +148,21 @@ public class Player : MonoBehaviour
 
 		controller.Move(Vector3.down * velocity_y);
 	}
+
+
+	public bool Damage(int damage)
+	{
+		if (Time.realtimeSinceStartup < nextDmgTime)
+			return false;
+
+		nextDmgTime = Time.realtimeSinceStartup + 1.5f;
+		hp -= damage;
+
+		// HP UI 변동
+
+		return true;
+	}
+
 
 	bool IsOnGround()
 	{

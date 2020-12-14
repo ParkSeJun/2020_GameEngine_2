@@ -8,7 +8,7 @@ public class Gun : MonoBehaviour
 
 	// Properties
 	[ReadOnly] int curGunIndex;
-	float afterCooldown; // 다음 격발 가능 시각
+	float nextCooldown; // 다음 격발 가능 시각
 
 	// Cached Variables
 	Renderer cachedRenderer;
@@ -20,7 +20,7 @@ public class Gun : MonoBehaviour
 	private void Awake()
 	{
 		curGunIndex = 0;
-		afterCooldown = 0f;
+		nextCooldown = 0f;
 		cachedRenderer = GetComponent<MeshRenderer>();
 		cachedAnimator = GetComponent<Animator>();
 	}
@@ -44,6 +44,16 @@ public class Gun : MonoBehaviour
 			SetGunData(newGunIndex);
 	}
 
+	public void SetZoomState(bool isZoom)
+	{
+		cachedAnimator.SetBool("isZoom", isZoom);
+	}
+
+	public void SetMovingState(bool isMoving)
+	{
+		cachedAnimator.SetBool("isMoving", isMoving);
+	}
+
 	public void SetGunData(int gunIndex)
 	{
 		curGunIndex = gunIndex;
@@ -54,7 +64,7 @@ public class Gun : MonoBehaviour
 	public void Fire(Vector3 camPos, Vector3 direction)
 	{
 		// 쿨다운 적용
-		afterCooldown = Time.realtimeSinceStartup + GetCurrentGunData().Cooldown;
+		nextCooldown = Time.realtimeSinceStartup + GetCurrentGunData().Cooldown;
 
 		// 쏘는 애니메이션
 		cachedAnimator.SetTrigger("fireEvent");
@@ -77,7 +87,8 @@ public class Gun : MonoBehaviour
 			// 몬스터를 맞힘
 			if (result.collider.gameObject.layer == LayerMask.NameToLayer(Constants.Layer.ENEMY))
 			{
-				// TODO: 몬스터에게 대미지 주기
+				// 몬스터에게 대미지 주기
+				result.collider.GetComponentInParent<Monster>().Damage(GetCurrentGunData().Damage);
 			}
 			// 벽을 맞힘
 			else if (result.collider.gameObject.layer == LayerMask.NameToLayer(Constants.Layer.MAP))
@@ -86,10 +97,10 @@ public class Gun : MonoBehaviour
 			}
 		}
 
-		
+
 	}
 
-	public bool CanFire() => afterCooldown < Time.realtimeSinceStartup;
+	public bool CanFire() => nextCooldown < Time.realtimeSinceStartup;
 
 	public Vector3 GetGunTipPosition() => gunTip.position;
 

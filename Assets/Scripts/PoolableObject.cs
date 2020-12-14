@@ -19,9 +19,13 @@ public class PoolableObject : MonoBehaviour
 		myPool = pool;
 
 		isAlive = true;
+
+		OnSpawn();
 	}
 
-	public void Release()
+	public virtual void OnSpawn() { }
+
+	public virtual void Release()
 	{
 		isAlive = false;
 		gameObject.SetActive(false);
