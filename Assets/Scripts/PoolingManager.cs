@@ -12,9 +12,13 @@ public class PoolingManager : Singletone<PoolingManager>
 	ObjectPool<GunShotEffect> gunShotEffectPool;
 	Transform gunShotEffectParent;
 
-	//[SerializeField] GameObject[] monsters;
-	//ObjectPool<BulletLine> bulletLinePool;
-	//Transform bulletLineParent;
+	[SerializeField] GameObject hpBar;
+	ObjectPool<HPBar> hpBarPool;
+	Transform hpBarParent;
+
+	[SerializeField] GameObject[] monsters;
+	ObjectPool<Monster>[] monsterPools;
+	Transform[] monsterParents;
 
 
 	// Cached Variables
@@ -31,6 +35,20 @@ public class PoolingManager : Singletone<PoolingManager>
 		gunShotEffectPool = new ObjectPool<GunShotEffect>(gunShotEffect);
 		gunShotEffectParent = new GameObject(nameof(GunShotEffect)).transform;
 		gunShotEffectParent.SetParent(cachedTransform);
+
+		hpBarPool = new ObjectPool<HPBar>(hpBar);
+		hpBarParent = GameObject.FindGameObjectWithTag("Canvas").transform;
+
+		int monstersCount = monsters.Length;
+		monsterPools = new ObjectPool<Monster>[monstersCount];
+		monsterParents = new Transform[monstersCount];
+		for (int i = 0; i < monstersCount; i++)
+		{
+			monsterPools[i] = new ObjectPool<Monster>(monsters[i]);
+			monsterParents[i] = new GameObject(nameof(Monster)).transform;
+			monsterParents[i].SetParent(cachedTransform);
+		}
+
 	}
 
 	public BulletLine SpawnBulletLine()
@@ -47,4 +65,18 @@ public class PoolingManager : Singletone<PoolingManager>
 		return gunShotEffect;
 	}
 
+	public HPBar SpawnHPBar(Transform hpPos)
+	{
+		var hpBar = hpBarPool.Spawn();
+		hpBar.transform.SetParent(hpBarParent);
+		hpBar.SetHpTransform(hpPos);
+		return hpBar;
+	}
+
+	public Monster SpawnMonster(int type)
+	{
+		var monster = monsterPools[type].Spawn();
+		monster.transform.SetParent(monsterParents[type]);
+		return monster;
+	}
 }

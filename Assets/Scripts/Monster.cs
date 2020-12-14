@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Threading.Tasks;
+using Unity.Collections;
 using UnityEngine;
-using UnityEditor;
 
 public class Monster : PoolableObject
 {
 	[SerializeField] Rect region;
-	[SerializeField] HPBar hpBar;
 	[SerializeField] Transform hpHere;
+	[ReadOnly] HPBar hpBar;
 
 	public enum State
 	{
@@ -43,6 +42,9 @@ public class Monster : PoolableObject
 	{
 		maxHp = 10f;
 		hp = maxHp;
+		hpBar = PoolingManager.Instance.SpawnHPBar(hpHere);
+		hpBar.SetHp(hp / maxHp);
+
 		state = State.Idle;
 		endOfNoDamageTime = 0f;
 		SetState(State.Idle);
@@ -152,15 +154,18 @@ public class Monster : PoolableObject
 			case State.DIe:
 				animator.Play("Die");
 				endOfDieTime = Time.realtimeSinceStartup + 1.5f;
+				if (hpBar)
+					hpBar.gameObject.SetActive(false);
 				break;
 		}
 
 		this.state = state;
 	}
 
-	private void OnCollisionStay(Collision collision)
+	private void OnCollisionEnter(Collision collision)
 	{
-		if (collision.gameObject.CompareTag("Player"))
+		Debug.Log(collision.collider.name);
+		if (collision.collider.gameObject.CompareTag("Player"))
 		{
 			bool isHit = GameManager.Instance.PlayerEntity.Damage(1);
 			if (isHit)
@@ -169,11 +174,12 @@ public class Monster : PoolableObject
 
 	}
 
-	public void Damage(float damage)
+	public async void Damage(float damage)
 	{
 		hp -= damage;
 
-		// TODO: HP바 변동
+		// HP바 변동
+		hpBar.SetHp(hp / maxHp);
 
 		if (hp < 0f)
 		{
@@ -182,6 +188,8 @@ public class Monster : PoolableObject
 		else
 		{
 			animator.CrossFade("Damage", 0.3f, 0);
+			await Task.Delay(833);
+			animator.CrossFade("Move", 0.3f, 0);
 		}
 	}
 
@@ -189,7 +197,6 @@ public class Monster : PoolableObject
 	bool IsOverAttackTime() => endOfAttackTime < Time.realtimeSinceStartup;
 	bool IsOverMoveTime() => endOfMoveTime < Time.realtimeSinceStartup;
 	bool IsArriveToMoveDest() => Vector3.Distance(cachedTransform.position, new Vector3(destPos.x, cachedTransform.position.y, destPos.z)) < 0.1f;
-
 
 	bool CanSeePlayer()
 	{

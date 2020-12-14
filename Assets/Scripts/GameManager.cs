@@ -26,6 +26,17 @@ public class GameManager : Singletone<GameManager>
 		}
 	}
 
+	Transform canvas;
+	public Transform Canvas
+	{
+		get
+		{
+			if (!canvas)
+				canvas = GameObject.FindGameObjectWithTag("Canvas")?.transform;
+			return canvas;
+		}
+	}
+
 	private void Awake()
 	{
 		Application.targetFrameRate = 60;

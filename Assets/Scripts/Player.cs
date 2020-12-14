@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
 
 		speed = Constants.DefaultStatus.Player.Move_Speed;
 		jumpPower = Constants.DefaultStatus.Player.Jump_Power;
+
 	}
 
 	void Update()
@@ -64,6 +65,10 @@ public class Player : MonoBehaviour
 
 		// 조준 모드 (우클릭)
 		ProcessZoom();
+
+		if (Input.GetKeyDown(KeyCode.Alpha4))
+			PoolingManager.Instance.SpawnMonster(0);
+
 	}
 
 	void ProcessZoom()
