@@ -18,7 +18,6 @@ public class Monster : PoolableObject
 	}
 
 	State state;
-	float endOfNoDamageTime; // 무적 끝나는 시각
 	float endOfIdleTime; // Idle 대기 끝나는 시각
 	float endOfMoveTime; // Move 끝나는 시각
 	float endOfAttackTime; // Attack 끝나는 시각
@@ -46,7 +45,6 @@ public class Monster : PoolableObject
 		hpBar.SetHp(hp / maxHp);
 
 		state = State.Idle;
-		endOfNoDamageTime = 0f;
 		SetState(State.Idle);
 	}
 
@@ -115,7 +113,6 @@ public class Monster : PoolableObject
 			}
 		}
 
-
 		if (state == State.Move || state == State.Trace)
 		{
 			var dir = destPos - cachedTransform.position;
@@ -124,6 +121,13 @@ public class Monster : PoolableObject
 
 			cachedTransform.LookAt(cachedTransform.position + dir);
 			controller.Move(dir * 1f * Time.deltaTime);
+		}
+
+		if (state != State.DIe && IsClosePlayer())
+		{
+			bool isHit = GameManager.Instance.PlayerEntity.Damage(1);
+			if (isHit)
+				SetState(State.Attack);
 		}
 	}
 
@@ -147,12 +151,12 @@ public class Monster : PoolableObject
 				break;
 
 			case State.Attack:
-				animator.Play("Attack");
+				animator.Play("Attack", 0);
 				endOfAttackTime = Time.realtimeSinceStartup + 1.5f;
 				break;
 
 			case State.DIe:
-				animator.Play("Die");
+				animator.Play("Die", 0);
 				endOfDieTime = Time.realtimeSinceStartup + 1.5f;
 				if (hpBar)
 					hpBar.gameObject.SetActive(false);
@@ -162,20 +166,11 @@ public class Monster : PoolableObject
 		this.state = state;
 	}
 
-	private void OnCollisionEnter(Collision collision)
-	{
-		Debug.Log(collision.collider.name);
-		if (collision.collider.gameObject.CompareTag("Player"))
-		{
-			bool isHit = GameManager.Instance.PlayerEntity.Damage(1);
-			if (isHit)
-				SetState(State.Attack);
-		}
-
-	}
-
 	public async void Damage(float damage)
 	{
+		if (hp < 0f)
+			return;
+
 		hp -= damage;
 
 		// HP바 변동
@@ -189,27 +184,30 @@ public class Monster : PoolableObject
 		{
 			animator.CrossFade("Damage", 0.3f, 0);
 			await Task.Delay(833);
-			animator.CrossFade("Move", 0.3f, 0);
+			if (state != State.DIe)
+				animator.CrossFade("Move", 0.3f, 0);
 		}
+	}
+
+	public void SetRegion(Rect region)
+	{
+		this.region = region;
 	}
 
 	bool IsOverDieTime() => endOfDieTime < Time.realtimeSinceStartup;
 	bool IsOverAttackTime() => endOfAttackTime < Time.realtimeSinceStartup;
 	bool IsOverMoveTime() => endOfMoveTime < Time.realtimeSinceStartup;
 	bool IsArriveToMoveDest() => Vector3.Distance(cachedTransform.position, new Vector3(destPos.x, cachedTransform.position.y, destPos.z)) < 0.1f;
-
+	bool IsNearPlayer() => Vector3.Distance(GameManager.Instance.PlayerTransform.position, cachedTransform.position) < 8f;
+	bool IsClosePlayer() => Vector3.Distance(GameManager.Instance.PlayerTransform.position, cachedTransform.position) < 1.5f;
 	bool CanSeePlayer()
 	{
 		Vector3 diff = GameManager.Instance.PlayerTransform.position - cachedTransform.position;
 		RaycastHit hitResult;
-		bool isHit = Physics.Raycast(new Ray(cachedTransform.position, diff.normalized), out hitResult, 4f, Constants.Layer.Mask.PLAYER | Constants.Layer.Mask.MAP);
+		bool isHit = Physics.Raycast(new Ray(cachedTransform.position, diff.normalized), out hitResult, 8f, Constants.Layer.Mask.PLAYER | Constants.Layer.Mask.MAP);
 		return isHit && hitResult.collider.CompareTag("Player");
 	}
 
-	bool IsNearPlayer()
-	{
-		return Vector3.Distance(GameManager.Instance.PlayerTransform.position, cachedTransform.position) < 4f;
-	}
 
 	public override void Release()
 	{
@@ -222,10 +220,7 @@ public class Monster : PoolableObject
 #if UNITY_EDITOR
 	private void OnDrawGizmos()
 	{
-		Debug.DrawLine(new Vector3(region.xMin, transform.position.y, region.yMin), new Vector3(region.xMin, transform.position.y, region.yMax), Color.red);
-		Debug.DrawLine(new Vector3(region.xMin, transform.position.y, region.yMin), new Vector3(region.xMax, transform.position.y, region.yMin), Color.red);
-		Debug.DrawLine(new Vector3(region.xMax, transform.position.y, region.yMax), new Vector3(region.xMin, transform.position.y, region.yMax), Color.red);
-		Debug.DrawLine(new Vector3(region.xMax, transform.position.y, region.yMax), new Vector3(region.xMax, transform.position.y, region.yMin), Color.red);
+		Helper.DrawRect(region, transform.position.y, Color.red);
 	}
 #endif
 }

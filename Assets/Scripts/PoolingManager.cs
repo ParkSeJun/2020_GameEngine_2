@@ -20,6 +20,7 @@ public class PoolingManager : Singletone<PoolingManager>
 	ObjectPool<Monster>[] monsterPools;
 	Transform[] monsterParents;
 
+	public int MonsterTypeCount => monsters.Length;
 
 	// Cached Variables
 	Transform cachedTransform;
