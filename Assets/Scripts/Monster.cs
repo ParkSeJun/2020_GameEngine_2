@@ -114,7 +114,10 @@ public class Monster : PoolableObject
 			}
 		}
 
-		if (state == State.Move || state == State.Trace)
+		if (UIManager.Instance.IsShowingUI)
+			return;
+
+		if (state == State.Move || state == State.Trace )
 		{
 			var dir = destPos - cachedTransform.position;
 			dir.y = 0f;
