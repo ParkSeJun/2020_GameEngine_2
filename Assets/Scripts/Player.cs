@@ -172,6 +172,11 @@ public class Player : MonoBehaviour
 		// HP UI 변동
 		uiHp.SetHp(hp);
 
+		if (hp <= 0)
+		{
+			UIManager.Instance.ShowGameOver(true);
+		}
+
 		return true;
 	}
 

@@ -24,7 +24,7 @@ public class Portal : MonoBehaviour
 		var nextScene = GameManager.Instance.GetNextSceneName();
 		if (string.IsNullOrEmpty(nextScene))
 		{
-			// TODO: 게임 클리어 화면 띄우기
+			UIManager.Instance.ShowClear(true);
 		}
 		else
 		{

@@ -25,7 +25,7 @@ public class PoolingManager : Singletone<PoolingManager>
 	// Cached Variables
 	Transform cachedTransform;
 
-	private void Start()
+	private void Awake()
 	{
 		Debug.Log("PM AWAKE");
 		cachedTransform = transform;

@@ -43,17 +43,12 @@ public class GameManager : Singletone<GameManager>
 	private void Awake()
 	{
 		Application.targetFrameRate = 60;
+
+		
 	}
 
 	private void Start()
 	{
-		Timing.RunCoroutine(YieldSpawnMonster());
-	}
-
-	IEnumerator<float> YieldSpawnMonster()
-	{
-		yield return Timing.WaitForSeconds(1f);
-
 		for (int i = 0; i < stageData.Monsters.Length; i++)
 		{
 			for (int j = 0; j < stageData.Monsters[i].count; j++)
@@ -66,6 +61,18 @@ public class GameManager : Singletone<GameManager>
 			}
 		}
 	}
+
+	//private void Start()
+	//{
+	//	Timing.RunCoroutine(YieldSpawnMonster());
+	//}
+
+	//IEnumerator<float> YieldSpawnMonster()
+	//{
+	//	yield return Timing.WaitForSeconds(1f);
+
+
+	//}
 
 
 	public string GetNextSceneName() => stageData.NextSceneName;
