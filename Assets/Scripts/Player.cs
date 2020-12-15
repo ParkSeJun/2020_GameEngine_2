@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 	[SerializeField] Transform cameraTransform;
 	[SerializeField] CinemachineVirtualCamera camDefault;
 	[SerializeField] CinemachineVirtualCamera camZoom;
+	[SerializeField] GameObject playerHpPrefab;
 
 	// Properties
 	[SerializeField] float speed;
@@ -22,7 +23,7 @@ public class Player : MonoBehaviour
 	CharacterController controller;
 	Gun _myGun;
 	Gun myGun => _myGun ?? (_myGun = GetComponentInChildren<Gun>());
-
+	PlayerHP uiHp;
 
 	void Awake()
 	{
@@ -38,9 +39,12 @@ public class Player : MonoBehaviour
 		nextDmgTime = 0f;
 		hp = 5;
 
+		if (!uiHp)
+			uiHp = GameObject.Instantiate(playerHpPrefab, GameManager.Instance.Canvas).GetComponent<PlayerHP>();
+		uiHp.SetHp(hp);
+
 		speed = Constants.DefaultStatus.Player.Move_Speed;
 		jumpPower = Constants.DefaultStatus.Player.Jump_Power;
-
 	}
 
 	void Update()
@@ -164,6 +168,7 @@ public class Player : MonoBehaviour
 		hp -= damage;
 
 		// HP UI 변동
+		uiHp.SetHp(hp);
 
 		return true;
 	}

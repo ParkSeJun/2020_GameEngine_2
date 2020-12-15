@@ -43,6 +43,7 @@ public class Monster : PoolableObject
 		hp = maxHp;
 		hpBar = PoolingManager.Instance.SpawnHPBar(hpHere);
 		hpBar.SetHp(hp / maxHp);
+		GetComponentInChildren<BoxCollider>().enabled = true;
 
 		state = State.Idle;
 		SetState(State.Idle);
@@ -160,6 +161,7 @@ public class Monster : PoolableObject
 				endOfDieTime = Time.realtimeSinceStartup + 1.5f;
 				if (hpBar)
 					hpBar.gameObject.SetActive(false);
+				GetComponentInChildren<BoxCollider>().enabled = false;
 				break;
 		}
 
