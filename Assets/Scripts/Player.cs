@@ -70,9 +70,6 @@ public class Player : MonoBehaviour
 		// 조준 모드 (우클릭)
 		ProcessZoom();
 
-		if (Input.GetKeyDown(KeyCode.Alpha4))
-			PoolingManager.Instance.SpawnMonster(0);
-
 	}
 
 	void ProcessZoom()
