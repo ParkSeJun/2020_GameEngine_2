@@ -10,12 +10,22 @@ public class HPBar : PoolableObject
 
 	private void Update()
 	{
-		var canvasPos = Camera.main.WorldToScreenPoint(hpPos.position);
+		if (!IsInCamera(hpPos.position))
+		{
+			cachedTransform.localScale = Vector3.zero;
+			return;
+		}
 
+		var canvasPos = Camera.main.WorldToScreenPoint(hpPos.position);
 		float distance = Vector3.Distance(hpPos.position, GameManager.Instance.PlayerTransform.position);
 		cachedTransform.localScale = Vector3.one * 3f / distance;
-
 		cachedTransform.position = canvasPos;
+	}
+
+	bool IsInCamera(Vector3 pos)
+	{
+		var viewport = Camera.main.WorldToViewportPoint(pos);
+		return viewport.x >= 0f && viewport.y >= 0f && viewport.z >= 0f;
 	}
 
 	public void SetHpTransform(Transform hpPosTransform)

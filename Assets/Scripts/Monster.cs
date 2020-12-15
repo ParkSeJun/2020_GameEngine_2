@@ -196,6 +196,13 @@ public class Monster : PoolableObject
 		this.region = region;
 	}
 
+	public void SetStatusMultiplier(float multiplier)
+	{
+		maxHp = 10f * multiplier;
+		hp = maxHp;
+		hpBar.SetHp(hp / maxHp);
+	}
+
 	bool IsOverDieTime() => endOfDieTime < Time.realtimeSinceStartup;
 	bool IsOverAttackTime() => endOfAttackTime < Time.realtimeSinceStartup;
 	bool IsOverMoveTime() => endOfMoveTime < Time.realtimeSinceStartup;

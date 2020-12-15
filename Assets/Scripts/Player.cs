@@ -173,6 +173,14 @@ public class Player : MonoBehaviour
 		return true;
 	}
 
+	public void Heal(int heal)
+	{
+		hp += heal;
+
+		// HP UI 변동
+		uiHp.SetHp(hp);
+	}
+
 
 	bool IsOnGround()
 	{

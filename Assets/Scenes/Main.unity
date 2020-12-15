@@ -594,7 +594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1000013827195344, guid: d82532fc4fd80bf4097d29efd331a0ff, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1000013827195344, guid: d82532fc4fd80bf4097d29efd331a0ff, type: 3}
       propertyPath: m_Layer
@@ -1053,7 +1053,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh19472
+  m_Name: pb_Mesh134584
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1378,7 +1378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1000013767804016, guid: c334a7c41936e764391ae93ab0e1981d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000011904546786, guid: c334a7c41936e764391ae93ab0e1981d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11550,7 +11550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b47d064beb5b10449a6243752284ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageData: {fileID: 11400000, guid: 2e0da81015058054b9c06e2a8217caee, type: 2}
+  stageData: {fileID: 11400000, guid: 9b26a78f7ae130841a7a3db12c31a4ae, type: 2}
 --- !u!4 &514246405
 Transform:
   m_ObjectHideFlags: 0
@@ -26524,7 +26524,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh19902
+  m_Name: pb_Mesh135064
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -34693,7 +34693,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1000011148102054, guid: 47228d4b7bdfaa94fbf70257eaa459a1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1000011199946392, guid: 47228d4b7bdfaa94fbf70257eaa459a1, type: 3}
       propertyPath: m_Layer
@@ -39698,6 +39698,23 @@ Transform:
   m_Father: {fileID: 629484403}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1104415760 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6040b101e86e0d8488597b13ffc3de02, type: 3}
+  m_PrefabInstance: {fileID: 49726510}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1104415763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104415760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 455bb889bebcf2e49ac1c4c63ce6abdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1114392309
 GameObject:
   m_ObjectHideFlags: 0
@@ -44781,7 +44798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1000013297890758, guid: 1ce05a9bb8cf8c34890ad308705a8ca4, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1000013341563594, guid: 1ce05a9bb8cf8c34890ad308705a8ca4, type: 3}
       propertyPath: m_Layer
