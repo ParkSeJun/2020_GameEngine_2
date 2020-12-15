@@ -16,8 +16,10 @@
     주어진 무기를 이용해 몬스터를 물리치거나 피해서 목적지까지 이동
 ### 조작 방법  
 * A, W, S, D : 이동  
-* 마우스 우클릭 : 조준
+* SPACE : 점프
+* 마우스 우클릭 : 줌(조준)
 * 마우스 좌클릭 : 공격
+
 
 ***   
 
@@ -28,11 +30,10 @@
 * gun model - asset store
     - https://assetstore.unity.com/packages/3d/props/guns/bit-gun-22922
     
-* skybox - 
+* skybox - https://assetstore.unity.com/packages/2d/textures-materials/sky/sky5x-one-6332
 
-* bg sound -    
+* bg sound -    https://bgmstore.net/view/5bb0d0e3352039d227086160/[%EA%B2%8C%EC%9E%84]%20Cloud%20Wars%20%EB%B0%B0%EA%B2%BD%EC%9D%8C%EC%95%85%20(%EA%B2%8C%EC%9E%84,%EB%8F%99%EC%8B%AC,%ED%8F%89%ED%99%94,%EC%88%9C%EC%88%98)
 
-* effect sound -   
    
 ***   
 
@@ -43,19 +44,19 @@
 <img width = "300" src="https://user-images.githubusercontent.com/22375492/96914484-068bff00-14e0-11eb-9a50-df893ebf7a36.png">
 </div>
 
+![stage](https://user-images.githubusercontent.com/22375492/102170771-70b99280-3ed8-11eb-880d-1fc5ce4e3408.PNG)
+
 ***  
 
 # 4. 개발 내용 중 강의를 통해 학습한 부분이 어떻게 활용 되었는지에 대한 설명  
-* Timer - 
-* Light setting - spot light, point light를 세팅함   
-* Script - 스크립트를 활용   
+* Light setting - spot light, point light, emission, fog
+* Script - 게임플레이 스크립트  
 * UI - UGUI
-* Particle - 총알이 충돌할 때 흩어지는 듯한 효과   
+* Particle - 레이저 발사, 횃불, 포탈   
 * Collider - mesh collider, bdx collider, capsul collider 등 오브젝트마다 적절하게 사용   
-* Rigidbody - 
-* Cinemachine - 
-* Navigation - 
-* Raycast - 
+* Rigidbody - 캐릭터, 몹
+* Cinemachine - 줌
+* Raycast - 충돌 
     
 ***    
 
@@ -66,7 +67,13 @@
     
 ***    
 
-# 6. 아쉬운 점   
+# 6. 아쉬운 점  
+    이펙트를 Shader Graph를 사용해서 만드려고 했는데, 프로젝트를 universal RP로 변경하면 기존에 만든 머티리얼들에 문제가 생김
+    몬스터 스폰에 문제가 있어서 종류별로 배치하지 못함
+    맵도 지하 3층부터 1층까지 3개를 제작했는데 버그가 있어서 지하 3층만 사용함
+    UI나 마지막 맵(지하1층)의 포탈에 도달하면 timeline으로 만든 영상이 있는데, 시간관계상 넣지 못함
+    여러가지 효과를 넣고 싶은게 많았는데 유니티 기능에 미숙하여 구현하지 못함
+    
     
     
 ***   
