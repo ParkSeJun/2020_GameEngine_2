@@ -73,8 +73,8 @@ public class Player : MonoBehaviour
 		// 조준 모드 (우클릭)
 		ProcessZoom();
 
-		if (Input.GetKeyDown(KeyCode.Alpha4))
-			UIManager.Instance.ShowGameOver(true);
+		if (Input.GetKeyDown(KeyCode.Escape))
+			UIManager.Instance.ShowPause(true);
 	}
 
 	void ProcessZoom()

@@ -21,7 +21,7 @@ MonoBehaviour:
       y: 6.32
       width: 3.82
       height: 6.57
-    y: 2.17
+    y: 2.35
     count: 3
   - region:
       serializedVersion: 2
@@ -29,5 +29,6 @@ MonoBehaviour:
       y: 13.83
       width: 4.44
       height: 5.73
-    y: 2.17
-    count: 2
+    y: 2.37
+    count: 3
+  nextSceneName: 

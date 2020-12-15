@@ -13,6 +13,6 @@ public class UIPause : MonoBehaviour
 	public void OnClickedMain()
 	{
 		// TODO: 씬이동 : 메인으로
-		SceneManager.LoadScene("Main");
+		SceneManager.LoadScene("Intro");
 	}
 }
