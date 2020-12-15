@@ -45,6 +45,7 @@
 </div>
 
 ![stage](https://user-images.githubusercontent.com/22375492/102170771-70b99280-3ed8-11eb-880d-1fc5ce4e3408.PNG)
+![image](https://user-images.githubusercontent.com/22375492/102170933-ca21c180-3ed8-11eb-8b0b-4feb813bf84d.png)
 
 ***  
 
