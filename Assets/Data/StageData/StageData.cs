@@ -14,13 +14,13 @@ public class StageData : ScriptableObject
 		public int count;
 	}
 
-
 	[SerializeField] int stageId;
 	[SerializeField] float monsterStatMultiplier;
 	[SerializeField] MonsterData[] monsters;
+	[SerializeField] string nextSceneName;
 
 	public int StageId => stageId;
 	public float MonsterStatMultiplier => monsterStatMultiplier;
 	public MonsterData[] Monsters => monsters;
-
+	public string NextSceneName => nextSceneName;
 }

@@ -10,7 +10,7 @@ public class HPBar : PoolableObject
 
 	private void Update()
 	{
-		if (!IsInCamera(hpPos.position))
+		if (!IsInCamera(hpPos.position) || UIManager.Instance.IsShowingUI)
 		{
 			cachedTransform.localScale = Vector3.zero;
 			return;

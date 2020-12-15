@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using MEC;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,6 +47,13 @@ public class GameManager : Singletone<GameManager>
 
 	private void Start()
 	{
+		Timing.RunCoroutine(YieldSpawnMonster());
+	}
+
+	IEnumerator<float> YieldSpawnMonster()
+	{
+		yield return Timing.WaitForSeconds(1f);
+
 		for (int i = 0; i < stageData.Monsters.Length; i++)
 		{
 			for (int j = 0; j < stageData.Monsters[i].count; j++)
@@ -59,6 +67,8 @@ public class GameManager : Singletone<GameManager>
 		}
 	}
 
+
+	public string GetNextSceneName() => stageData.NextSceneName;
 
 #if UNITY_EDITOR
 	private void OnDrawGizmos()

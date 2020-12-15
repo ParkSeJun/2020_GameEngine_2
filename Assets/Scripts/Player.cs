@@ -49,6 +49,9 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
+		if (UIManager.Instance.IsShowingUI)
+			return;
+
 		isGround = IsOnGround();
 		isZoom = Input.GetMouseButton(1);
 
@@ -70,6 +73,8 @@ public class Player : MonoBehaviour
 		// 조준 모드 (우클릭)
 		ProcessZoom();
 
+		if (Input.GetKeyDown(KeyCode.Alpha4))
+			UIManager.Instance.ShowGameOver(true);
 	}
 
 	void ProcessZoom()
